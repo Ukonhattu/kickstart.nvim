@@ -1,9 +1,9 @@
--- You can add your own plugins here or in other files in this directory!
---  I promise not to create any merge conflicts in this directory :)
---
--- See the kickstart.nvim README for more information
+-- Here are some plugins that don't need config and are more of a dependencies for other plugins
+
 return {
 	"nvim-lua/plenary.nvim", -- lua functions that many plugins use
 
-	"christoomey/vim-tmux-navigator", -- tmux & split window navigation
+	"christoomey/vim-tmux-navigator", -- tmux & split window navigation,
+
+	"MunifTanjim/nui.nvim", -- UI Component library
 }
