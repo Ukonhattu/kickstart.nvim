@@ -31,9 +31,16 @@ return {
     dashboard.section.terminal.opts.window_config = { border = 'none', col = (vim.api.nvim_win_get_width(0) * 2) }
     dashboard.section.terminal.opts.redraw = true
 
-    dashboard.section.header.val = "  𝕟 𝕖 𝕠 𝕧 𝕚 𝕞  "
+--    dashboard.section.header.val = "  𝕟 𝕖 𝕠 𝕧 𝕚 𝕞  "
+      dashboard.section.header.val ={
 
-    dashboard.config.layout = {
+" _____   __ _  ___  ___    ___  ___   __   __  ___   __  __",
+"|_   _| | || ||_ _|/ __|  |_ _|/ __|  \\ \\ / / |_ _| |  \\/  | ",
+"  | |   | __ | | | \\__ \\   | | \\__ \\   \\ V /   | |  | |\\/| | ",
+"  |_|   |_||_||___||___/  |___||___/    \\_/   |___| |_|  |_| "
+}
+                                                             
+     dashboard.config.layout = {
       { type = "padding", val = 1 },
       dashboard.section.terminal,
       { type = "padding", val = 2 },

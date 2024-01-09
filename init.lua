@@ -191,10 +191,10 @@ require('lazy').setup({
   },
 
   {
-    'bluz71/vim-nightfly-guicolors', name = 'nightfly',
+    'rose-pine/neovim', name = 'rose-pine',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme "nightfly"
+      vim.cmd.colorscheme "rose-pine"
     end,
     opts = {}
   },
@@ -206,7 +206,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'nightfly',
+        theme = 'rose-pine',
         component_separators = '|',
         section_separators = '',
       },
