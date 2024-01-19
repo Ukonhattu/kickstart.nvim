@@ -190,11 +190,21 @@ require('lazy').setup({
     },
   },
 
+  -- {
+  --   'rose-pine/neovim', name = 'rose-pine',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme "rose-pine"
+  --   end,
+  --   opts = {}
+  -- },
+
   {
-    'rose-pine/neovim', name = 'rose-pine',
+    'catppuccin/nvim', name = 'catppuccin',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme "rose-pine"
+      vim.opt.termguicolors = true
+      vim.cmd.colorscheme = "catppuccin"
     end,
     opts = {}
   },
@@ -205,8 +215,8 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
-        theme = 'rose-pine',
+        icons_enabled = true,
+        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
