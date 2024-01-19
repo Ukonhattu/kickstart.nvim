@@ -577,6 +577,9 @@ local servers = {
   rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
+  dockerls = {},
+  docker_compose_language_service = {},
+  hls = {},
 
   lua_ls = {
     Lua = {
