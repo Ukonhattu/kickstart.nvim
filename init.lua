@@ -202,11 +202,28 @@ require('lazy').setup({
   {
     'catppuccin/nvim', name = 'catppuccin',
     priority = 1000,
-    config = function()
+    config = function(_, opts)
+      require('catppuccin').setup(opts)
       vim.opt.termguicolors = true
-      vim.cmd.colorscheme = "catppuccin"
+      vim.cmd.colorscheme  "catppuccin"
     end,
-    opts = {}
+    opts = {
+      integrations = {
+        cmp = true,
+        dap = true,
+        dap_ui = true,
+        noice = true,
+        notify = true,
+        telescope = {
+          enabled = true,
+          style = "nvchad"
+        },
+        which_key = true,
+        coc_nvim = true,
+        alpha = true,
+      },
+      flavour = "macchiato",
+    },
   },
 
   {
@@ -218,7 +235,7 @@ require('lazy').setup({
         icons_enabled = true,
         theme = 'catppuccin',
         component_separators = '|',
-        section_separators = '',
+        section_separators = { left = '', right = '' },
       },
     },
   },
