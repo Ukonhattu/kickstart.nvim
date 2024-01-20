@@ -199,31 +199,42 @@ require('lazy').setup({
   --   opts = {}
   -- },
 
+  -- {
+  --   'catppuccin/nvim', name = 'catppuccin',
+  --   priority = 1000,
+  --   config = function(_, opts)
+  --     require('catppuccin').setup(opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme  "catppuccin"
+  --   end,
+  --   opts = {
+  --     integrations = {
+  --       cmp = true,
+  --       dap = true,
+  --       dap_ui = true,
+  --       noice = true,
+  --       notify = true,
+  --       telescope = {
+  --         enabled = true,
+  --         style = "nvchad"
+  --       },
+  --       which_key = true,
+  --       coc_nvim = true,
+  --       alpha = true,
+  --     },
+  --     flavour = "macchiato",
+  --   },
+  -- },
   {
-    'catppuccin/nvim', name = 'catppuccin',
+    'craftzdog/solarized-osaka.nvim',
+    name = 'solarized-osaka',
+    lazy = false,
     priority = 1000,
-    config = function(_, opts)
-      require('catppuccin').setup(opts)
+    config = function()
       vim.opt.termguicolors = true
-      vim.cmd.colorscheme  "catppuccin"
+      vim.cmd.colorscheme "solarized-osaka"
     end,
-    opts = {
-      integrations = {
-        cmp = true,
-        dap = true,
-        dap_ui = true,
-        noice = true,
-        notify = true,
-        telescope = {
-          enabled = true,
-          style = "nvchad"
-        },
-        which_key = true,
-        coc_nvim = true,
-        alpha = true,
-      },
-      flavour = "macchiato",
-    },
+    
   },
 
   {
@@ -233,7 +244,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'catppuccin',
+        theme = 'auto',
         component_separators = '|',
         section_separators = { left = '', right = '' },
       },
