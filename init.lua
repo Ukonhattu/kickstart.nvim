@@ -230,11 +230,14 @@ require('lazy').setup({
     name = 'solarized-osaka',
     lazy = false,
     priority = 1000,
-    config = function()
+    config = function(_, opts)
+      require('solarized-osaka').setup(opts)
       vim.opt.termguicolors = true
       vim.cmd.colorscheme "solarized-osaka"
     end,
-    
+    opts = {
+      transparent = false,
+    }
   },
 
   {
@@ -614,7 +617,7 @@ local servers = {
   clangd = {},
   gopls = {},
   pyright = {},
-  rust_analyzer = {},
+  -- rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
   dockerls = {},
