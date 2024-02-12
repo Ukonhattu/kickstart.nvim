@@ -225,19 +225,28 @@ require('lazy').setup({
   --     flavour = "macchiato",
   --   },
   -- },
+  -- {
+  --   'craftzdog/solarized-osaka.nvim',
+  --   name = 'solarized-osaka',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function(_, opts)
+  --     require('solarized-osaka').setup(opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme "solarized-osaka"
+  --   end,
+  --   opts = {
+  --     transparent = false,
+  --   }
+  -- },
+  
   {
-    'craftzdog/solarized-osaka.nvim',
-    name = 'solarized-osaka',
-    lazy = false,
+    'morhetz/gruvbox', name = 'gruvbox',
     priority = 1000,
     config = function(_, opts)
-      require('solarized-osaka').setup(opts)
       vim.opt.termguicolors = true
-      vim.cmd.colorscheme "solarized-osaka"
+      vim.cmd.colorscheme "gruvbox"
     end,
-    opts = {
-      transparent = false,
-    }
   },
 
   {
@@ -260,7 +269,11 @@ require('lazy').setup({
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
     main = 'ibl',
-    opts = {},
+    opts = {
+    },
+    config = function(_, opts)
+      require("ibl").setup (opts)
+    end,
   },
 
   -- "gc" to comment visual regions/lines
@@ -347,7 +360,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
-vim.wo.signcolumn = 'yes'
+vim.wo.signcolumn = 'number'
 
 -- Decrease update time
 vim.o.updatetime = 250
