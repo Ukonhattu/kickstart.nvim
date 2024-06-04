@@ -1,0 +1,7 @@
+return {
+'leafOfTree/vim-svelte-plugin',
+ft = {'svelte'},
+config = function()
+	require('vim-svelte-plugin').setup()
+end,
+}

@@ -113,7 +113,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -127,7 +127,6 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        
         local gs = package.loaded.gitsigns
 
         local function map(mode, l, r, opts)
@@ -239,16 +238,29 @@ require('lazy').setup({
   --     transparent = false,
   --   }
   -- },
-  
+
+  -- {
+  --   'morhetz/gruvbox', name = 'gruvbox',
+  --   priority = 1000,
+  --   config = function(_, opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme "gruvbox"
+  --   end,
+  -- },
+  --
   {
-    'morhetz/gruvbox', name = 'gruvbox',
+    'eldritch-theme/eldritch.nvim',
+    name = 'eldritch',
     priority = 1000,
     config = function(_, opts)
+      require("eldritch").setup(opts)
       vim.opt.termguicolors = true
-      vim.cmd.colorscheme "gruvbox"
+      vim.cmd.colorscheme "eldritch"
     end,
+    opts = {
+      transparent = false,
+    }
   },
-
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -272,7 +284,7 @@ require('lazy').setup({
     opts = {
     },
     config = function(_, opts)
-      require("ibl").setup (opts)
+      require("ibl").setup(opts)
     end,
   },
 
@@ -308,18 +320,18 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
- 
-  {
-    'github/copilot.vim',
-    config = function()
-       vim.g.copilot_assume_mapped = true
-    end 
-  },
+
+  -- {
+  --   'github/copilot.vim',
+  --   config = function()
+  --      vim.g.copilot_assume_mapped = true
+  --   end
+  -- },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -360,7 +372,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
-vim.wo.signcolumn = 'number'
+vim.wo.signcolumn = 'auto:4'
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -632,10 +644,12 @@ local servers = {
   pyright = {},
   -- rust_analyzer = {},
   tsserver = {},
-  html = { filetypes = { 'html', 'twig', 'hbs'} },
+  html = { filetypes = { 'html', 'twig', 'hbs' } },
   dockerls = {},
   docker_compose_language_service = {},
   hls = {},
+  eslint = {},
+  svelte = {},
 
   lua_ls = {
     Lua = {
