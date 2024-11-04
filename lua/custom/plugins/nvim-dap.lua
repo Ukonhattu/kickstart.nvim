@@ -1,9 +1,9 @@
 return {
   {
     'mfussenegger/nvim-dap',
-    config = function ()
-     vim.keymap.set('n', '<leader>db', '<cmd> DapToggleBreakpoint <CR>')
-     local function dap_widget ()
+    config = function()
+      vim.keymap.set('n', '<leader>db', '<cmd> DapToggleBreakpoint <CR>')
+      local function dap_widget()
         local widgets = require('dap.ui.widgets')
         local sidebar = widgets.sidebar(widgets.scopes)
         sidebar.open()
@@ -14,14 +14,14 @@ return {
 
   {
     'theHamsta/nvim-dap-virtual-text',
-    config = function ()
+    config = function()
       require("nvim-dap-virtual-text").setup()
     end
   },
 
   {
     'rcarriga/nvim-dap-ui',
-    config = function ()
+    config = function()
       require("dapui").setup()
     end
   }

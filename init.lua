@@ -256,6 +256,7 @@ require('lazy').setup({
       require("eldritch").setup(opts)
       vim.opt.termguicolors = true
       vim.cmd.colorscheme "eldritch"
+      vim.cmd.highlight "Normal guibg=none"
     end,
     opts = {
       transparent = false,
@@ -321,12 +322,11 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- {
-  --   'github/copilot.vim',
-  --   config = function()
-  --      vim.g.copilot_assume_mapped = true
-  --   end
-  -- },
+  {
+    'github/copilot.vim',
+    config = function()
+    end
+  },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -372,7 +372,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
-vim.wo.signcolumn = 'auto:4'
+vim.wo.signcolumn = 'yes:3'
 
 -- Decrease update time
 vim.o.updatetime = 250
