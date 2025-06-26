@@ -541,7 +541,7 @@ vim.defer_fn(function()
     ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-    auto_install = false,
+    auto_install = true,
 
     highlight = { enable = true },
     indent = { enable = true },
@@ -662,7 +662,7 @@ require('mason-lspconfig').setup()
 --  define the property 'filetypes' to the map in question.
 local servers = {
   clangd = {},
-  gopls = {},
+  --  gopls = {},
   pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
@@ -670,7 +670,7 @@ local servers = {
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   dockerls = {},
   docker_compose_language_service = {},
-  hls = {},
+  -- hls = {},
   eslint = {},
   svelte = {},
   omnisharp = {},
