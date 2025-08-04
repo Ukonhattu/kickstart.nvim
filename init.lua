@@ -211,7 +211,8 @@ require('lazy').setup({
   },
 
   -- {
-  --   'rose-pine/neovim', name = 'rose-pine',
+  --   'rose-pine/neovim',
+  --   name = 'rose-pine',
   --   priority = 1000,
   --   config = function()
   --     vim.cmd.colorscheme "rose-pine"
@@ -219,32 +220,32 @@ require('lazy').setup({
   --   opts = {}
   -- },
 
-  -- {
-  --   'catppuccin/nvim', name = 'catppuccin',
-  --   priority = 1000,
-  --   config = function(_, opts)
-  --     require('catppuccin').setup(opts)
-  --     vim.opt.termguicolors = true
-  --     vim.cmd.colorscheme  "catppuccin"
-  --   end,
-  --   opts = {
-  --     integrations = {
-  --       cmp = true,
-  --       dap = true,
-  --       dap_ui = true,
-  --       noice = true,
-  --       notify = true,
-  --       telescope = {
-  --         enabled = true,
-  --         style = "nvchad"
-  --       },
-  --       which_key = true,
-  --       coc_nvim = true,
-  --       alpha = true,
-  --     },
-  --     flavour = "macchiato",
-  --   },
-  -- },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    config = function(_, opts)
+      require('catppuccin').setup(opts)
+      vim.opt.termguicolors = true
+      vim.cmd.colorscheme "catppuccin"
+    end,
+    opts = {
+      integrations = {
+        cmp = true,
+        dap = true,
+        dap_ui = true,
+        noice = true,
+        notify = true,
+        telescope = {
+          enabled = true,
+        },
+        which_key = true,
+        coc_nvim = true,
+        alpha = true,
+      },
+      flavour = "macchiato",
+    },
+  },
   -- {
   --   'craftzdog/solarized-osaka.nvim',
   --   name = 'solarized-osaka',
@@ -261,11 +262,21 @@ require('lazy').setup({
   -- },
 
   -- {
-  --   'morhetz/gruvbox', name = 'gruvbox',
+  --   'morhetz/gruvbox',
+  --   name = 'gruvbox',
   --   priority = 1000,
   --   config = function(_, opts)
   --     vim.opt.termguicolors = true
   --     vim.cmd.colorscheme "gruvbox"
+  --   end,
+  -- },
+  -- {
+  --   'rebelot/kanagawa.nvim',
+  --   priority = 1000,
+  --   config = function(_, opts)
+  --     require('kanagawa').setup(opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme "kanagawa-wave"
   --   end,
   -- },
   --
@@ -283,17 +294,28 @@ require('lazy').setup({
   --     transparent = false,
   --   }
   -- },
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
-    config = function(_, opts)
-      require("tokyonight").setup(opts)
-      vim.opt.termguicolors = true
-      vim.cmd.colorscheme "tokyonight"
-    end,
-  },
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {},
+  --   config = function(_, opts)
+  --     require("tokyonight").setup(opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme "tokyonight"
+  --   end,
+  -- },
+  -- {
+  --   'liuchengxu/space-vim-dark',
+  --   name = "space-vim-dark",
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {},
+  --   config = function(_, opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme "space-vim-dark"
+  --   end,
+  -- },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -601,7 +623,7 @@ vim.defer_fn(function()
   }
 end, 0)
 
--- [[ Configure LSP ]]
+-- -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -775,6 +797,19 @@ cmp.setup {
     },
   },
 }
+
+
+vim.diagnostic.config({
+  virtual_text = false, -- disable default inline
+})
+
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = "ඞ",
+    spacing = 2,
+    severity = { min = vim.diagnostic.severity.HINT },
+  },
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
