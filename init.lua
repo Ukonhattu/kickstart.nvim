@@ -696,6 +696,7 @@ local servers = {
   eslint = {},
   svelte = {},
   omnisharp = {},
+  vimls = {},
 
   lua_ls = {
     Lua = {
