@@ -13,6 +13,18 @@ return {
           vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
         end,
       },
+
+      settings = {
+        ["rust-analyzer"] = {
+          diagnostics = { enable = true },
+          cargo = {
+            buildScripts = { enable = true },
+            allFeatures = true,
+            workspace = true,
+          },
+          procMacro = { enable = true },
+        },
+      },
     })
   end
 }

@@ -1,1 +1,1 @@
-return { dir = '~/projects/tmc.vim/' }
+return {} --return { dir = '~/Code/tmc.vim/' }

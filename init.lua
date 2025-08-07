@@ -800,17 +800,36 @@ cmp.setup {
 }
 
 
-vim.diagnostic.config({
-  virtual_text = false, -- disable default inline
-})
 
-vim.diagnostic.config({
-  virtual_text = {
-    prefix = "ඞ",
-    spacing = 2,
-    severity = { min = vim.diagnostic.severity.HINT },
-  },
-})
 
+-- Ensure 'vim' is defined (runs only inside Neovim)
+if vim and vim.diagnostic then
+  vim.diagnostic.config({
+    virtual_text = {
+      prefix = "ඞ", -- Icon before inline messages
+      spacing = 2,
+      severity = {
+        min = vim.diagnostic.severity.HINT, -- Show hints and above
+      },
+    },
+    signs = true,             -- Show signs in the gutter
+    underline = true,         -- Underline problem text
+    update_in_insert = false, -- Don't update diagnostics while typing
+    severity_sort = true,     -- Sort diagnostics by severity
+    float = {
+      show_header = true,
+      source = "if_many", -- Show diagnostic source (rust-analyzer, etc.)
+      border = "rounded",
+      focusable = false,
+    },
+  })
+
+  -- Define signs for the gutter (like VSCode icons)
+  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+  for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  end
+end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
