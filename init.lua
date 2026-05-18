@@ -376,20 +376,6 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
-
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    opts = {
-      suggestion = { enabled = false }, -- disable inline suggestions
-      panel = { enabled = false },      -- disable the copilot panel
-    },
-    config = function(_, opts)
-      require("copilot").setup(opts)
-    end
-  },
-
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
