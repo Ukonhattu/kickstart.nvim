@@ -1,10 +1,18 @@
 return {
 	"rest-nvim/rest.nvim",
-	dependencies = {
-		"nvim-treesitter/nvim-treesitter",
-		opts = function(_, opts)
-			opts.ensure_installed = opts.ensure_installed or {}
-			table.insert(opts.ensure_installed, "http")
-		end,
-	}
+	config = function()
+		local parser = vim.fs.joinpath(
+			vim.fn.stdpath("data"),
+			"lazy-rocks",
+			"rest.nvim",
+			"lib",
+			"lua",
+			"5.1",
+			"parser",
+			"http.so"
+		)
+		if vim.uv.fs_stat(parser) then
+			vim.treesitter.language.add("http", { path = parser })
+		end
+	end,
 }

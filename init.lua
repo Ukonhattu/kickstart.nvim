@@ -51,7 +51,7 @@ vim.o.secure = true
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',
@@ -94,8 +94,18 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+    },
+  },
+
+  {
+    -- Teaches lua_ls about the Neovim API (vim.*) when editing Lua config files.
+    -- Replaces folke/neodev.nvim, which is archived and does not work with Neovim 0.12.
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
     },
   },
 
@@ -220,32 +230,59 @@ require('lazy').setup({
   --   opts = {}
   -- },
 
+  -- Gruvbox, matched to the kitty theme (~/.config/kitty/gruvbox-warm.conf):
+  -- warm brown background #3b3029 and warmer/lighter UI shades on top of it.
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
+    'ellisonleao/gruvbox.nvim',
+    name = 'gruvbox',
+    lazy = false,
     priority = 1000,
     config = function(_, opts)
-      require('catppuccin').setup(opts)
+      require('gruvbox').setup(opts)
       vim.opt.termguicolors = true
-      vim.cmd.colorscheme "catppuccin"
+      vim.o.background = 'dark'
+      vim.cmd.colorscheme 'gruvbox'
     end,
     opts = {
-      integrations = {
-        cmp = true,
-        dap = true,
-        dap_ui = true,
-        noice = true,
-        notify = true,
-        telescope = {
-          enabled = true,
-        },
-        which_key = true,
-        coc_nvim = true,
-        alpha = true,
+      contrast = '', -- use dark0 below as the background
+      palette_overrides = {
+        dark0_hard = '#312822', -- darkest: floats with contrast = "hard"
+        dark0 = '#3b3029', -- main background (same as kitty)
+        dark0_soft = '#43372f',
+        dark1 = '#4a3d34', -- cursor line, status line, popups
+        dark2 = '#574a40', -- selection, inactive status line
+        dark3 = '#66584c', -- borders, line numbers
+        dark4 = '#7a6b5d',
       },
-      flavour = "macchiato",
     },
   },
+
+  -- {
+  --   'catppuccin/nvim',
+  --   name = 'catppuccin',
+  --   priority = 1000,
+  --   config = function(_, opts)
+  --     require('catppuccin').setup(opts)
+  --     vim.opt.termguicolors = true
+  --     vim.cmd.colorscheme "catppuccin"
+  --   end,
+  --   opts = {
+  --     integrations = {
+  --       cmp = true,
+  --       dap = true,
+  --       dap_ui = true,
+  --       noice = true,
+  --       notify = true,
+  --       telescope = {
+  --         enabled = true,
+  --       },
+  --       which_key = true,
+  --       coc_nvim = true,
+  --       alpha = true,
+  --     },
+  --     flavour = "macchiato",
+  --   },
+  -- },
   -- {
   --   'craftzdog/solarized-osaka.nvim',
   --   name = 'solarized-osaka',
@@ -368,13 +405,19 @@ require('lazy').setup({
   },
 
   {
-    -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    branch = 'master',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-    },
-    build = ':TSUpdate',
+    -- Textobjects for selections like `af`, `if`, `ac`, `ic`, `aa`, and `ia`.
+    'echasnovski/mini.ai',
+    version = false,
+    opts = function()
+      local ai = require 'mini.ai'
+
+      return {
+        custom_textobjects = {
+          f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+          c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
+        },
+      }
+    end,
   },
 
   {
@@ -459,17 +502,17 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, { desc = 'Go to previous diagnostic message' })
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
+-- See `:help vim.hl.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
   group = highlight_group,
   pattern = '*',
@@ -556,73 +599,20 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
 -- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
--- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
-vim.defer_fn(function()
-  require('nvim-treesitter.configs').setup {
-    -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+-- See `:help treesitter`
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Start native Treesitter highlighting when a parser is available',
+  callback = function(event)
+    local lang = vim.treesitter.language.get_lang(event.match)
+    if not lang then
+      return
+    end
 
-    -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-    auto_install = true,
-
-    highlight = { enable = true },
-    indent = { enable = true },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<c-space>',
-        node_incremental = '<c-space>',
-        scope_incremental = '<c-s>',
-        node_decremental = '<M-space>',
-      },
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-        keymaps = {
-          -- You can use the capture groups defined in textobjects.scm
-          ['aa'] = '@parameter.outer',
-          ['ia'] = '@parameter.inner',
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          [']m'] = '@function.outer',
-          [']]'] = '@class.outer',
-        },
-        goto_next_end = {
-          [']M'] = '@function.outer',
-          [']['] = '@class.outer',
-        },
-        goto_previous_start = {
-          ['[m'] = '@function.outer',
-          ['[['] = '@class.outer',
-        },
-        goto_previous_end = {
-          ['[M'] = '@function.outer',
-          ['[]'] = '@class.outer',
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ['<leader>a'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<leader>A'] = '@parameter.inner',
-        },
-      },
-    },
-  }
-end, 0)
+    if vim.treesitter.language.add(lang) then
+      pcall(vim.treesitter.start, event.buf, lang)
+    end
+  end,
+})
 
 -- -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
@@ -673,7 +663,6 @@ end
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
-require('mason-lspconfig').setup()
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -711,15 +700,29 @@ local servers = {
 
 
 
--- Setup neovim lua configuration
-require('neodev').setup()
-
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
+
+-- Configure the servers with Neovim's built-in vim.lsp.config (Neovim 0.11+).
+-- mason-lspconfig then installs them and enables them automatically.
+vim.lsp.config('*', { capabilities = capabilities })
+for name, settings in pairs(servers) do
+  local filetypes = settings.filetypes
+  settings.filetypes = nil
+  vim.lsp.config(name, { settings = settings, filetypes = filetypes })
+end
+
+-- LSP keymaps (on_attach above) for every buffer a server attaches to
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
+  callback = function(event)
+    on_attach(vim.lsp.get_client_by_id(event.data.client_id), event.buf)
+  end,
+})
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
@@ -733,7 +736,7 @@ require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 local has_words_before = function()
-  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  if vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt" then return false end
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
@@ -813,7 +816,14 @@ if vim and vim.diagnostic then
         min = vim.diagnostic.severity.HINT, -- Show hints and above
       },
     },
-    signs = true,             -- Show signs in the gutter
+    signs = {                 -- Show signs in the gutter (like VSCode icons)
+      text = {
+        [vim.diagnostic.severity.ERROR] = " ",
+        [vim.diagnostic.severity.WARN] = " ",
+        [vim.diagnostic.severity.HINT] = " ",
+        [vim.diagnostic.severity.INFO] = " ",
+      },
+    },
     underline = true,         -- Underline problem text
     update_in_insert = false, -- Don't update diagnostics while typing
     severity_sort = true,     -- Sort diagnostics by severity
@@ -825,12 +835,6 @@ if vim and vim.diagnostic then
     },
   })
 
-  -- Define signs for the gutter (like VSCode icons)
-  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-  end
 end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
